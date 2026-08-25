@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Školský systém – Prihlásenie</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <main class="login-page">
+
+        <section class="login-card">
+
+            <div class="logo">
+                <div class="logo-icon">Š</div>
+                <h1>Školský systém</h1>
+            </div>
+
+            <p class="subtitle">
+                Prihláste sa do svojho účtu
+            </p>
+
+            <form id="loginForm">
+
+                <label for="username">
+                    Prihlasovacie meno
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Zadajte prihlasovacie meno"
+                    required
+                >
+
+                <label for="password">
+                    Heslo
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Zadajte heslo"
+                    required
+                >
+
+                <button type="submit">
+                    Prihlásiť sa
+                </button>
+
+                <p id="loginMessage"></p>
+
+            </form>
+
+            <div class="login-info">
+                <p>Školský informačný systém</p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="js/app.js"></script>
+
+</body>
+</html>
