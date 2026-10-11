@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="sk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Domov | Školský portál – demo</title><style>
+:root{--blue:#1769aa;--navy:#12324a;--bg:#f3f6fa;--line:#dce4ec;--text:#203040}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+header{background:var(--navy);color:white;padding:18px max(20px,calc((100% - 1050px)/2));display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.brand{font-size:20px;font-weight:700}.tag{font-size:12px;background:#ffffff20;padding:6px 9px;border-radius:20px}
+nav{display:flex;gap:8px;flex-wrap:wrap}a,button{cursor:pointer}nav a{color:white;text-decoration:none;padding:9px 11px;border-radius:8px}nav a:hover{background:#ffffff20}
+main{max-width:1050px;margin:28px auto;padding:0 18px}.notice{background:#fff8df;border:1px solid #f0d78c;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:18px}.card,.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 3px 14px #17334b0a}
+h1{font-size:28px;margin:0 0 10px}h2{font-size:18px;margin-top:0}.muted{color:#637487;line-height:1.5}
+.btn{display:inline-block;border:0;background:var(--blue);color:white;padding:11px 15px;border-radius:8px;text-decoration:none;font-weight:600}.btn.secondary{background:#eaf1f7;color:var(--navy)}
+form{display:grid;gap:12px}label{font-size:14px;font-weight:600}input{display:block;width:100%;margin-top:6px;padding:12px;border:1px solid #bdcbd8;border-radius:8px;font:inherit}button:disabled{opacity:.6}
+.auth{max-width:440px;margin:36px auto}.status{margin-top:12px;font-size:14px;line-height:1.5}.status.error{color:#b42318}.status.ok{color:#167447}
+footer{text-align:center;color:#718096;font-size:12px;padding:28px 15px}
+</style></head><body>
+<header><div class="brand">Školský portál <span class="tag">DEMO</span></div><nav>
+<a href="index.html">Domov</a><a href="login.html">Prihlásenie</a><a href="register.html">Registrácia</a><a href="admin.html">Správa</a>
+</nav></header>
+<main>
+<div class="notice"><strong>Demo stránka:</strong> Toto je samostatný ukážkový školský portál, nie oficiálna stránka EduPage. Použi len svoj účet vytvorený pre tento projekt.</div>
+<section style="margin-top:26px"><h1>Vitaj v školskom portáli</h1><p class="muted">Jednoduché miesto na ukážku školských informácií. Po prihlásení sa zobrazí stav účtu.</p><p><a class="btn" href="login.html">Prihlásiť sa</a> <a class="btn secondary" href="register.html">Vytvoriť účet</a></p></section>
+<div class="grid">
+<div class="card"><h2>📅 Rozvrh hodín</h2><p class="muted">Ukážková sekcia rozvrhu. Dáta si môžeš doplniť pre vlastný projekt.</p></div>
+<div class="card"><h2>⭐ Známky</h2><p class="muted">Bez pripojenia na školský systém sa tu nezobrazujú skutočné známky.</p></div>
+<div class="card"><h2>📝 Domáce úlohy</h2><p class="muted">Miesto pre vlastné ukážkové úlohy a oznamy.</p></div>
+<div class="card"><h2>✉️ Správy</h2><p class="muted">Táto ukážka nečíta správy zo skutočného EduPage.</p></div>
+</div><section class="panel" style="margin-top:18px"><h2>Stav prihlásenia</h2><div id="account" class="muted">Načítavam…</div><p><button id="logout" class="btn secondary" hidden>Odhlásiť sa</button></p></section>
+</main>
+<footer>Ukážkový projekt pre GitHub Pages. Nie je to oficiálna stránka EduPage.</footer>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+<script>const firebaseConfig = {
+  apiKey: "AIzaSyAOnFkji23AfdpLgfeOa4o2e8xmkARvUsw",
+  authDomain: "edupage-c5bde.firebaseapp.com",
+  databaseURL: "https://edupage-c5bde-default-rtdb.firebaseio.com",
+  projectId: "edupage-c5bde",
+  storageBucket: "edupage-c5bde.firebasestorage.app",
+  messagingSenderId: "958116890674",
+  appId: "1:958116890674:web:08ec8eadede5badb4f542b",
+  measurementId: "G-MLM73RHZ66"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+const ADMIN_EMAIL = "videojarko@gmail.com";
+</script>
+<script>
+const account = document.getElementById('account'), logout = document.getElementById('logout');
+auth.onAuthStateChanged(user => {
+ if(user){account.textContent = 'Prihlásený účet: ' + user.email; logout.hidden = false;}
+ else {account.textContent = 'Nie si prihlásený. Na používanie účtu otvor Prihlásenie.'; logout.hidden = true;}
+});
+logout.addEventListener('click', async()=>{await auth.signOut(); location.reload();});
+</script>
+</body></html>
