@@ -10,28 +10,43 @@ main{max-width:1050px;margin:28px auto;padding:0 18px}.notice{background:#fff8df
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:18px}.card,.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 3px 14px #17334b0a}
 h1{font-size:28px;margin:0 0 10px}h2{font-size:18px;margin-top:0}.muted{color:#637487;line-height:1.5}
 .btn{display:inline-block;border:0;background:var(--blue);color:white;padding:11px 15px;border-radius:8px;text-decoration:none;font-weight:600}.btn.secondary{background:#eaf1f7;color:var(--navy)}
-form{display:grid;gap:12px}label{font-size:14px;font-weight:600}input{display:block;width:100%;margin-top:6px;padding:12px;border:1px solid #bdcbd8;border-radius:8px;font:inherit}button:disabled{opacity:.6}
-.auth{max-width:440px;margin:36px auto}.status{margin-top:12px;font-size:14px;line-height:1.5}.status.error{color:#b42318}.status.ok{color:#167447}
 footer{text-align:center;color:#718096;font-size:12px;padding:28px 15px}
 </style></head><body>
 <header><div class="brand">Školský portál <span class="tag">DEMO</span></div><nav>
 <a href="index.html">Domov</a><a href="login.html">Prihlásenie</a><a href="register.html">Registrácia</a><a href="admin.html">Správa</a>
 </nav></header>
 <main>
-<div class="notice"><strong>Demo stránka:</strong> Toto je samostatný ukážkový školský portál, nie oficiálna stránka EduPage. Použi len svoj účet vytvorený pre tento projekt.</div>
-<section style="margin-top:26px"><h1>Vitaj v školskom portáli</h1><p class="muted">Jednoduché miesto na ukážku školských informácií. Po prihlásení sa zobrazí stav účtu.</p><p><a class="btn" href="login.html">Prihlásiť sa</a> <a class="btn secondary" href="register.html">Vytvoriť účet</a></p></section>
+<div class="notice"><strong>Demo stránka:</strong> Toto je samostatný ukážkový školský portál[cite: 1]. Všetky údaje spravuje administrátor.</div>
+
+<section style="margin-top:26px">
+  <h1>Vitaj v školskom portáli</h1>
+  <p class="muted">Prehľad školských informácií a oznamov.</p>
+  <div id="announcementBox" style="margin-top:15px; background:#eaf1f7; border-left:4px solid var(--blue); padding:12px 16px; border-radius:6px;" hidden>
+    <strong>Aktuálny oznam od správcu:</strong> <span id="announcementText"></span>
+  </div>
+</section>
+
 <div class="grid">
-<div class="card"><h2>📅 Rozvrh hodín</h2><p class="muted">Ukážková sekcia rozvrhu. Dáta si môžeš doplniť pre vlastný projekt.</p></div>
-<div class="card"><h2>⭐ Známky</h2><p class="muted">Bez pripojenia na školský systém sa tu nezobrazujú skutočné známky.</p></div>
-<div class="card"><h2>📝 Domáce úlohy</h2><p class="muted">Miesto pre vlastné ukážkové úlohy a oznamy.</p></div>
-<div class="card"><h2>✉️ Správy</h2><p class="muted">Táto ukážka nečíta správy zo skutočného EduPage.</p></div>
-</div><section class="panel" style="margin-top:18px"><h2>Stav prihlásenia</h2><div id="account" class="muted">Načítavam…</div><p><button id="logout" class="btn secondary" hidden>Odhlásiť sa</button></p></section>
+<div class="card"><h2>📅 Rozvrh hodín</h2><p class="muted">Základný prehľad vyučovania.</p></div>
+<div class="card"><h2>⭐ Známky</h2><p class="muted">Sekcia pre študijné výsledky.</p></div>
+<div class="card"><h2>📝 Domáce úlohy</h2><p class="muted">Aktuálne zadania pre žiakov.</p></div>
+<div class="card"><h2>🍽️ Jedálny lístok</h2><div id="canteenList" class="muted">Načítavam jedálny lístok...</div></div>
+</div>
+
+<section class="panel" style="margin-top:18px">
+  <h2>Stav prihlásenia</h2>
+  <div id="account" class="muted">Načítavam…</div>
+  <p><button id="logout" class="btn secondary" hidden>Odhlásiť sa</button></p>
+</section>
 </main>
-<footer>Ukážkový projekt pre GitHub Pages. Nie je to oficiálna stránka EduPage.</footer>
+
+<footer>Ukážkový projekt pre GitHub Pages. Nie je to oficiálna stránka EduPage.[cite: 1]</footer>
+
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-<script>const firebaseConfig = {
+<script>
+const firebaseConfig = {
   apiKey: "AIzaSyAOnFkji23AfdpLgfeOa4o2e8xmkARvUsw",
   authDomain: "edupage-c5bde.firebaseapp.com",
   databaseURL: "https://edupage-c5bde-default-rtdb.firebaseio.com",
@@ -41,18 +56,45 @@ footer{text-align:center;color:#718096;font-size:12px;padding:28px 15px}
   appId: "1:958116890674:web:08ec8eadede5badb4f542b",
   measurementId: "G-MLM73RHZ66"
 };
-
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
-const ADMIN_EMAIL = "videojarko@gmail.com";
-</script>
-<script>
+
+// Autentifikácia na domovskej stránke
 const account = document.getElementById('account'), logout = document.getElementById('logout');
 auth.onAuthStateChanged(user => {
  if(user){account.textContent = 'Prihlásený účet: ' + user.email; logout.hidden = false;}
  else {account.textContent = 'Nie si prihlásený. Na používanie účtu otvor Prihlásenie.'; logout.hidden = true;}
 });
 logout.addEventListener('click', async()=>{await auth.signOut(); location.reload();});
+
+// Načítanie oznamu
+db.ref('demoAnnouncement').on('value', snapshot => {
+  const data = snapshot.val();
+  const box = document.getElementById('announcementBox');
+  const txt = document.getElementById('announcementText');
+  if(data && data.text){
+    txt.textContent = data.text;
+    box.hidden = false;
+  } else {
+    box.hidden = true;
+  }
+});
+
+// Načítanie jedálneho lístka
+db.ref('canteen').on('value', snapshot => {
+  const container = document.getElementById('canteenList');
+  const data = snapshot.val();
+  if(!data){
+    container.innerHTML = 'Zatiaľ nie je pridaný žiadny jedálny lístok.';
+    return;
+  }
+  let html = '<ul style="margin:0; padding-left:18px;">';
+  for(let key in data){
+    html += `<li><strong>${data[key].day}:</strong> ${data[key].menu}</li>`;
+  }
+  html += '</ul>';
+  container.innerHTML = html;
+});
 </script>
 </body></html>
