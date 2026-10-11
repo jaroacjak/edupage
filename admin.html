@@ -7,27 +7,77 @@ header{background:var(--navy);color:white;padding:18px max(20px,calc((100% - 105
 .brand{font-size:20px;font-weight:700}.tag{font-size:12px;background:#ffffff20;padding:6px 9px;border-radius:20px}
 nav{display:flex;gap:8px;flex-wrap:wrap}a,button{cursor:pointer}nav a{color:white;text-decoration:none;padding:9px 11px;border-radius:8px}nav a:hover{background:#ffffff20}
 main{max-width:1050px;margin:28px auto;padding:0 18px}.notice{background:#fff8df;border:1px solid #f0d78c;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.5}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:18px}.card,.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 3px 14px #17334b0a}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}.card,.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 3px 14px #17334b0a}
 h1{font-size:28px;margin:0 0 10px}h2{font-size:18px;margin-top:0}.muted{color:#637487;line-height:1.5}
 .btn{display:inline-block;border:0;background:var(--blue);color:white;padding:11px 15px;border-radius:8px;text-decoration:none;font-weight:600}.btn.secondary{background:#eaf1f7;color:var(--navy)}
-form{display:grid;gap:12px}label{font-size:14px;font-weight:600}input{display:block;width:100%;margin-top:6px;padding:12px;border:1px solid #bdcbd8;border-radius:8px;font:inherit}button:disabled{opacity:.6}
-.auth{max-width:440px;margin:36px auto}.status{margin-top:12px;font-size:14px;line-height:1.5}.status.error{color:#b42318}.status.ok{color:#167447}
+form{display:grid;gap:12px}label{font-size:14px;font-weight:600}input,textarea,select{display:block;width:100%;margin-top:6px;padding:12px;border:1px solid #bdcbd8;border-radius:8px;font:inherit}button:disabled{opacity:.6}
+.status{margin-top:12px;font-size:14px;line-height:1.5}.status.error{color:#b42318}.status.ok{color:#167447}
 footer{text-align:center;color:#718096;font-size:12px;padding:28px 15px}
 </style></head><body>
 <header><div class="brand">Školský portál <span class="tag">DEMO</span></div><nav>
 <a href="index.html">Domov</a><a href="login.html">Prihlásenie</a><a href="register.html">Registrácia</a><a href="admin.html">Správa</a>
 </nav></header>
-<main><div class="notice"><strong>Upozornenie:</strong> Kontrola e-mailu v tomto HTML slúži iba na zobrazenie demo administrátorskej stránky. Skutočné oprávnenia musia byť vynútené Firebase Security Rules alebo serverom s overenými custom claims.</div>
-<section class="panel" style="margin-top:18px"><h1>Administrácia</h1><p class="muted">Táto stránka je určená pre nakonfigurovaný administrátorský e-mail.</p><div id="adminStatus" class="status">Overujem prihlásenie…</div>
-<div id="adminPanel" hidden><h2>Admin panel – ukážka</h2><p class="muted">Tu môžeš doplniť správu oznamov alebo obsahu. Nepridávaj citlivé operácie, kým nie sú nastavené bezpečnostné pravidlá databázy.</p>
-<label for="announcement">Text ukážkového oznamu</label><input id="announcement" placeholder="Napr. Zmena rozvrhu v piatok">
-<button id="saveAnnouncement" class="btn" style="margin-top:12px">Uložiť ukážkový oznam</button><div id="saveStatus" class="status"></div></div>
-<p><a href="login.html">Prihlásenie</a> · <a href="index.html">Domov</a></p></section></main>
+<main>
+<div class="notice"><strong>Administrácia:</strong> Táto sekcia je dostupná len pre administrátora portálu. Všetky zmeny sa ukladajú priamo do Firebase databázy.</div>
+<section class="panel" style="margin-top:18px">
+  <h1>Administrácia agendy</h1>
+  <p class="muted">Správa údajov pre učiteľov, žiakov, jedálny lístok a oznamy.</p>
+  <div id="adminStatus" class="status">Overujem prihlásenie…</div>
+
+  <div id="adminPanel" hidden>
+    <div class="grid">
+      <!-- Správa oznamov -->
+      <div class="card">
+        <h2>📢 Školský oznam</h2>
+        <label for="announcement">Text oznamu</label>
+        <input id="announcement" placeholder="Napr. Zmena rozvrhu v piatok">
+        <button id="saveAnnouncement" class="btn" style="margin-top:12px">Uložiť oznam</button>
+        <div id="saveStatus" class="status"></div>
+      </div>
+
+      <!-- Pridanie učiteľa -->
+      <div class="card">
+        <h2>👨‍🏫 Pridať učiteľa</h2>
+        <label for="teacherName">Meno a priezvisko</label>
+        <input id="teacherName" placeholder="Mgr. Ján Novák">
+        <label for="teacherSubject" style="margin-top:8px">Aprobácia / Predmety</label>
+        <input id="teacherSubject" placeholder="Matematika, Fyzika">
+        <button id="saveTeacher" class="btn" style="margin-top:12px">Pridať učiteľa</button>
+        <div id="teacherStatus" class="status"></div>
+      </div>
+
+      <!-- Pridanie žiaka -->
+      <div class="card">
+        <h2>👦 Pridať žiaka</h2>
+        <label for="studentName">Meno a priezvisko</label>
+        <input id="studentName" placeholder="Peter Mrkvicka">
+        <label for="studentClass" style="margin-top:8px">Trieda</label>
+        <input id="studentClass" placeholder="7.A">
+        <button id="saveStudent" class="btn" style="margin-top:12px">Pridať žiaka</button>
+        <div id="studentStatus" class="status"></div>
+      </div>
+
+      <!-- Správa jedálneho lístka -->
+      <div class="card">
+        <h2>🍽️ Jedálny lístok</h2>
+        <label for="canteenDay">Deň / Dátum</label>
+        <input id="canteenDay" placeholder="Pondelok (12.10.2026)">
+        <label for="canteenMenu" style="margin-top:8px">Obed (Polievka, Hlavné jedlo)</label>
+        <textarea id="canteenMenu" rows="3" placeholder="1. Slepačia polievka, Kurací rezeň, zemiaková kaša"></textarea>
+        <button id="saveCanteen" class="btn" style="margin-top:12px">Uložiť jedálny lístok</button>
+        <div id="canteenStatus" class="status"></div>
+      </div>
+    </div>
+  </div>
+  
+  <p style="margin-top:24px;"><a href="login.html">Prihlásenie</a> · <a href="index.html">Domov</a></p>
+</section></main>
 <footer>Ukážkový projekt pre GitHub Pages. Nie je to oficiálna stránka EduPage.</footer>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-<script>const firebaseConfig = {
+<script>
+const firebaseConfig = {
   apiKey: "AIzaSyAOnFkji23AfdpLgfeOa4o2e8xmkARvUsw",
   authDomain: "edupage-c5bde.firebaseapp.com",
   databaseURL: "https://edupage-c5bde-default-rtdb.firebaseio.com",
@@ -37,25 +87,80 @@ footer{text-align:center;color:#718096;font-size:12px;padding:28px 15px}
   appId: "1:958116890674:web:08ec8eadede5badb4f542b",
   measurementId: "G-MLM73RHZ66"
 };
-
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 const ADMIN_EMAIL = "videojarko@gmail.com";
-</script>
-<script>
-const adminStatus=document.getElementById('adminStatus'), panel=document.getElementById('adminPanel');
-auth.onAuthStateChanged(user=>{
- if(!user){adminStatus.className='status error';adminStatus.textContent='Prístup zamietnutý. Najprv sa prihlás.';panel.hidden=true;return;}
- if((user.email||'').toLowerCase()!==ADMIN_EMAIL.toLowerCase()){adminStatus.className='status error';adminStatus.textContent='Tento účet nie je určený ako správca.';panel.hidden=true;return;}
- adminStatus.className='status ok';adminStatus.textContent='Prihlásený ako '+user.email+'. Pozor: toto je iba klientská demo kontrola.';panel.hidden=false;
+
+const adminStatus = document.getElementById('adminStatus'), panel = document.getElementById('adminPanel');
+auth.onAuthStateChanged(user => {
+  if(!user){
+    adminStatus.className = 'status error';
+    adminStatus.textContent = 'Prístup zamietnutý. Najprv sa prihlás ako administrátor.';
+    panel.hidden = true;
+    return;
+  }
+  if((user.email || '').toLowerCase() !== ADMIN_EMAIL.toLowerCase()){
+    adminStatus.className = 'status error';
+    adminStatus.textContent = 'Tento účet (' + user.email + ') nemá administrátorské práva.';
+    panel.hidden = true;
+    return;
+  }
+  adminStatus.className = 'status ok';
+  adminStatus.textContent = 'Prihlásený ako správca: ' + user.email;
+  panel.hidden = false;
 });
-document.getElementById('saveAnnouncement').addEventListener('click',async()=>{
- const text=document.getElementById('announcement').value.trim(), el=document.getElementById('saveStatus');
- if(!text){el.className='status error';el.textContent='Najprv napíš oznam.';return;}
- try{await db.ref('demoAnnouncement').set({text,updatedAt:Date.now(),updatedBy:auth.currentUser.email});
- el.className='status ok';el.textContent='Oznam uložený do demo databázy.';}
- catch(e){el.className='status error';el.textContent='Uloženie zablokovali pravidlá databázy alebo nastavenie Firebase. Nastav bezpečnostné pravidlá.';}
+
+// Uloženie oznamu
+document.getElementById('saveAnnouncement').addEventListener('click', async()=>{
+  const text = document.getElementById('announcement').value.trim(), el = document.getElementById('saveStatus');
+  if(!text){el.className='status error';el.textContent='Vyplň text oznamu.';return;}
+  try{
+    await db.ref('demoAnnouncement').set({text, updatedAt: Date.now(), updatedBy: auth.currentUser.email});
+    el.className='status ok'; el.textContent='Oznam úspešne uložený.';
+  }catch(e){el.className='status error'; el.textContent='Chyba pri ukladaní: ' + e.message;}
+});
+
+// Pridanie učiteľa
+document.getElementById('saveTeacher').addEventListener('click', async()=>{
+  const name = document.getElementById('teacherName').value.trim();
+  const subject = document.getElementById('teacherSubject').value.trim();
+  const el = document.getElementById('teacherStatus');
+  if(!name || !subject){el.className='status error'; el.textContent='Vyplň meno aj predmety učiteľa.'; return;}
+  try{
+    await db.ref('teachers').push({name, subject, createdAt: Date.now()});
+    el.className='status ok'; el.textContent='Učiteľ pridaný do databázy.';
+    document.getElementById('teacherName').value = '';
+    document.getElementById('teacherSubject').value = '';
+  }catch(e){el.className='status error'; el.textContent='Chyba: ' + e.message;}
+});
+
+// Pridanie žiaka
+document.getElementById('saveStudent').addEventListener('click', async()=>{
+  const name = document.getElementById('studentName').value.trim();
+  const studentClass = document.getElementById('studentClass').value.trim();
+  const el = document.getElementById('studentStatus');
+  if(!name || !studentClass){el.className='status error'; el.textContent='Vyplň meno aj triedu žiaka.'; return;}
+  try{
+    await db.ref('students').push({name, class: studentClass, createdAt: Date.now()});
+    el.className='status ok'; el.textContent='Žiak pridaný do databázy.';
+    document.getElementById('studentName').value = '';
+    document.getElementById('studentClass').value = '';
+  }catch(e){el.className='status error'; el.textContent='Chyba: ' + e.message;}
+});
+
+// Uloženie jedálneho lístka
+document.getElementById('saveCanteen').addEventListener('click', async()=>{
+  const day = document.getElementById('canteenDay').value.trim();
+  const menu = document.getElementById('canteenMenu').value.trim();
+  const el = document.getElementById('canteenStatus');
+  if(!day || !menu){el.className='status error'; el.textContent='Vyplň deň aj jedlo.'; return;}
+  try{
+    await db.ref('canteen').push({day, menu, createdAt: Date.now()});
+    el.className='status ok'; el.textContent='Jedálny lístok uložený.';
+    document.getElementById('canteenDay').value = '';
+    document.getElementById('canteenMenu').value = '';
+  }catch(e){el.className='status error'; el.textContent='Chyba: ' + e.message;}
 });
 </script>
 </body></html>
